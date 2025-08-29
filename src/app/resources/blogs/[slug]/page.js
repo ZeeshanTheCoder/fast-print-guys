@@ -292,7 +292,7 @@ export default async function BlogDetails({ params }) {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Blog Post Not Found</h1>
           <Link
-            href="/blogs"
+            href="/resources/blogs"
             className="text-blue-600 hover:underline mt-4 inline-block"
           >
             Back to Blogs
@@ -316,7 +316,7 @@ export default async function BlogDetails({ params }) {
 
         <div className="relative px-6 py-12 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto">
           <div className="flex-1 mb-8 md:mb-0">
-            <Link href="/blogs" passHref>
+            <Link href="/resources/blogs" passHref>
               <span className="text-white hover:text-yellow-400 cursor-pointer mb-4 inline-block">
                 &larr; Back to Blogs
               </span>
@@ -374,7 +374,7 @@ export default async function BlogDetails({ params }) {
             />
 
             <div className="mt-8 pt-6 border-t border-gray-200">
-              <Link href="/blogs" passHref>
+              <Link href="/resources/blogs" passHref>
                 <div className="text-blue-600 font-medium text-sm gap-2 items-center cursor-pointer hover:text-blue-800 inline-flex">
                   <span className="transform rotate-180">
                     <Image
