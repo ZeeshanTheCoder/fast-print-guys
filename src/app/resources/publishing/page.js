@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 import maskgroup from "@/assets/images/guide-mask-group.png";
-import bannerimg from "@/assets/images/banner/guide-banner.png";
+import bannerimg from "@/assets/images/banner/publishing-banner.png";
 import ourBlogBGImg from "@/assets/images/our-blog-bg-img.png";
 import img1 from "@/assets/images/Group-1261153897.png";
 import img3 from "@/assets/images/Group-1261153896.png";
@@ -15,7 +15,7 @@ import usLetterImage from "@/assets/images/image-32-1.png";
 import { FaDownload } from "react-icons/fa";
 import Faq from "@/components/Faq";
 
-const GuideTemplate = () => {
+const Publishing = () => {
   return (
     <>
       {/* Banner */}
@@ -41,8 +41,9 @@ const GuideTemplate = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
-              <span className="text-yellow-400">Guide</span>
-              <span className="text-white ml-2">And Templates</span>
+              <span className="text-white">Book Publishing Services,</span>
+              <br />
+              <span className="text-yellow-400">Fast Print Guys</span>
             </h1>
             <p className="text-white text-sm md:text-base leading-relaxed">
               Create your own book as a gift! With international custom book
@@ -81,64 +82,37 @@ const GuideTemplate = () => {
         />
 
         <div className="relative z-10 max-w-7xl mx-16 px-4 py-16 space-y-16">
-          {/* Feature 1 */}
-          <div className="flex flex-col md:flex-row items-center gap-10">
-            <div className="md:w-1/2 text-center  md:text-left  items-center">
-              <p className="uppercase text-lg font-semibold text-[#2A428C] mb-2">
-                READ
-              </p>
-              <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
-                Bookmaking <span className="custom-text-gradient">Basics</span>
-              </h3>
-              <p className="text-gray-700 mb-6 text-base md:text-lg">
-                Learn how to bring your story to life! Our expert tips and
-                printing services help turn your ideas into professionally bound
-                books.
-              </p>
-              <button className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full">
-                Read More
-              </button>
-            </div>
-            <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-60 h-60 sm:w-90 sm:h-90">
-                <Image
-                  src={img1}
-                  alt="Bookmaking Basics"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          </div>
+          <h2 className="text-4xl font-bold text-center mb-7">
+            Fast, Affordable Book Publishing Services for <br />
+            <span className="custom-text-gradient">
+              {" "}
+              Self-Published Authors
+            </span>
+          </h2>
+
+          <p className="text-center mb-7">
+            Looking for professional and affordable{" "}
+            <strong>book publishing services? </strong>At <strong>Fast Print Guys,</strong> we
+            help authors turn their manuscripts into beautifully published books
+            — ready for sale on <strong>Amazon KDP, Kindle, Barnes & Noble, IngramSpark,</strong>
+            and more.
+          </p>
+
+          <p className="text-center">
+              Whether you’re new to <strong>self-publishing</strong> or a seasoned author, we
+            provide <strong>end-to-end publishing solutions</strong> that save time, reduce
+            hassle, and maximize visibility.
+          </p>
 
           {/* Feature 2 */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-10">
-            <div className="md:w-1/2 text-center md:text-left">
-              <p className="uppercase text-lg font-semibold text-[#2A428C] mb-2">
-                WATCH
-              </p>
-              <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
-                Formatting Tips For <br />
-                <span className="custom-text-gradient">Print Books</span>
-              </h3>
-              <p className="text-gray-700 mb-6 text-base md:text-lg">
-                Discover industry formatting standards, layout best practices,
-                and design tips to make your book print-ready.
-              </p>
-              <button className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full">
-                Watch Now
-              </button>
-            </div>
-            <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-60 h-60 sm:w-90 sm:h-90">
-                <Image
-                  src={img3}
-                  alt="Formatting Tips For Print Books"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            </div>
+          <div>
+             <h2 className="text-4xl font-bold text-center mb-7">
+            What We Can
+            <span className="custom-text-gradient">
+              {" "}
+              Help You With
+            </span>
+          </h2>
           </div>
 
           {/* Feature 3 */}
@@ -361,9 +335,8 @@ const GuideTemplate = () => {
 
       {/* FAQ */}
       <Faq />
-      
     </>
   );
 };
 
-export default GuideTemplate;
+export default Publishing;

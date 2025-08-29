@@ -40,6 +40,19 @@
   .prose em {
     @apply italic text-gray-700;
   }
+
+  .custom-btn-gradient {
+    background: linear-gradient(90deg, #016ab3 0%, #0096cd 61%, #00aedc 100%);
+  }
+
+  .custom-text-gradient {
+    background: linear-gradient(90deg, #016ab3 0%, #0096cd 61%, #00aedc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* For Firefox */
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 #root {

@@ -2,8 +2,8 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import blogbanner from "@/assets/images/blogbanner.png";
-import bgblogbanner from "@/assets/images/blog-banner-mask.png";
+import blogbanner from "@/assets/images/banner/blogbanner.png";
+import maskgroup from "@/assets/images/blog-mask-group.png";
 import ourBlogBGImg from "@/assets/images/our-blog-bg-img.png";
 import readMoreArrow from "@/assets/images/read-more-arrow.png";
 import img1 from "@/assets/images/blog-card-1.jpg";
@@ -307,7 +307,7 @@ export default async function BlogDetails({ params }) {
       {/* Banner */}
       <div className="relative bg-[#101D2E] border-purple-500 overflow-hidden">
         <Image
-          src={bgblogbanner}
+          src={maskgroup}
           alt="Blog banner background"
           fill
           style={{ objectFit: "cover" }}
