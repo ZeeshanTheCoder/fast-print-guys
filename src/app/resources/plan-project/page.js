@@ -236,7 +236,7 @@ const GuideTemplate = () => {
           priority
         />
 
-        <div className="relative z-10 max-w-7xl mx-16 px-4 py-16 space-y-16">
+        <div className="relative z-10 max-w-7xl sm:mx-16 mx-5 px-4 py-16 space-y-16">
           {/* Feature 1 */}
           <div className="my-10">
             <h2 className="text-4xl font-bold text-center flex flex-col gap-5 mb-10">
@@ -281,11 +281,11 @@ const GuideTemplate = () => {
               Book
               <span className="custom-text-gradient "> Bindings</span>
             </h2>
-            <div className="m-10 flex flex-row">
-              <div className="w-1/2 flex justify-center">
+            <div className="m-10 flex sm:flex-row flex-col">
+              <div className="sm:w-1/2 flex justify-center">
                 <Image src={mainBook} height={400} width={400} alt="" />
               </div>
-              <div className="w-1/2 flex flex-col gap-3">
+              <div className="sm:w-1/2 flex flex-col gap-3">
                 <h3 className="text-[#016AB3] text-lg font-bold">
                   Paperback Perfect Bound
                 </h3>
@@ -422,13 +422,12 @@ const GuideTemplate = () => {
           </div>
 
           {/* Feature 3 */}
-          <div className="flex flex-col md:flex-row items-center gap-10">
+          <div className="flex flex-col md:flex-row items-center sm:gap-10">
             <div className="md:w-1/2 flex justify-center">
-              <div className="relative w-60 h-60 sm:w-150 sm:h-90">
+              <div className="relative w-80 h-80 sm:w-150 sm:h-90">
                 <Image
                   src={pricing}
                   alt="Free New User Guide"
-                  fill
                   className="object-contain"
                 />
               </div>
