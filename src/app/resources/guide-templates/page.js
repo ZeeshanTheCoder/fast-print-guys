@@ -15,11 +15,71 @@ import usLetterImage from "@/assets/images/image-32-1.png";
 import { FaDownload } from "react-icons/fa";
 import Faq from "@/components/Faq";
 
+// Animation variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { 
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+const scaleUp = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: "easeOut" }
+  }
+};
+
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.7, ease: "easeOut" }
+  }
+};
+
 const GuideTemplate = () => {
   return (
     <>
-      {/* Banner */}
-      <div className="relative bg-[#443201] border-purple-500 overflow-hidden">
+      {/* Banner - This section will animate on load since it's at the top */}
+      <motion.div 
+        initial="hidden"
+        animate="visible"
+        variants={fadeIn}
+        className="relative bg-[#443201] border-purple-500 overflow-hidden"
+      >
         <Image
           src={maskgroup}
           alt="Mask Group"
@@ -30,48 +90,62 @@ const GuideTemplate = () => {
 
         <motion.div
           className="relative px-6 py-12 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          variants={fadeInUp}
         >
           <motion.div
             className="flex-1 mb-8 md:mb-0"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            variants={slideInFromLeft}
           >
-            <h1 className="text-3xl md:text-5xl font-bold mb-6">
+            <motion.h1 
+              className="text-3xl md:text-5xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
               <span className="text-yellow-400">Guide</span>
               <span className="text-white ml-2">And Templates</span>
-            </h1>
-            <p className="text-white text-sm md:text-base leading-relaxed">
+            </motion.h1>
+            <motion.p 
+              className="text-white text-sm md:text-base leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
               Create your own book as a gift! With international custom book
               printing and no order minimum, you can have books printed & bound
               in hardcover, paperback, coil bound, or saddle stitch. Print a
-              novel, children’s book, cookbook, magazine, or any kind of book
+              novel, children's book, cookbook, magazine, or any kind of book
               you can think of.
-            </p>
+            </motion.p>
           </motion.div>
 
           <motion.div
             className="flex-1 flex items-center justify-end"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            variants={slideInFromRight}
           >
-            <div className="relative">
+            <motion.div 
+              className="relative"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <Image
                 src={bannerimg}
                 alt="Guide and Template Illustration"
                 className="h-auto max-w-full"
               />
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* Features */}
-      <div className="relative bg-white overflow-hidden border-t-4 border-blue-600">
+      {/* Features - Animate on scroll */}
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={fadeIn}
+        className="relative bg-white overflow-hidden border-t-4 border-blue-600"
+      >
         <Image
           src={ourBlogBGImg}
           alt="Gradient Background"
@@ -80,26 +154,60 @@ const GuideTemplate = () => {
           priority
         />
 
-        <div className="relative z-10 max-w-7xl mx-16 px-4 py-16 space-y-16">
+        <motion.div 
+          className="relative z-10 max-w-7xl mx-16 px-4 py-16 space-y-16"
+          variants={staggerContainer}
+        >
           {/* Feature 1 */}
-          <div className="flex flex-col md:flex-row items-center gap-10">
+          <motion.div 
+            className="flex flex-col md:flex-row items-center gap-10"
+            variants={fadeInUp}
+          >
             <div className="md:w-1/2 text-center  md:text-left  items-center">
-              <p className="uppercase text-lg font-semibold text-[#2A428C] mb-2">
+              <motion.p 
+                className="uppercase text-lg font-semibold text-[#2A428C] mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
                 READ
-              </p>
-              <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
+              </motion.p>
+              <motion.h3 
+                className="text-2xl md:text-5xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
                 Bookmaking <span className="custom-text-gradient">Basics</span>
-              </h3>
-              <p className="text-gray-700 mb-6 text-base md:text-lg">
+              </motion.h3>
+              <motion.p 
+                className="text-gray-700 mb-6 text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
                 Learn how to bring your story to life! Our expert tips and
                 printing services help turn your ideas into professionally bound
                 books.
-              </p>
-              <button className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full">
+              </motion.p>
+              <motion.button 
+                className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Read More
-              </button>
+              </motion.button>
             </div>
-            <div className="md:w-1/2 flex justify-center">
+            <motion.div 
+              className="md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
               <div className="relative w-60 h-60 sm:w-90 sm:h-90">
                 <Image
                   src={img1}
@@ -108,28 +216,59 @@ const GuideTemplate = () => {
                   className="object-contain"
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Feature 2 */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-10">
+          <motion.div 
+            className="flex flex-col md:flex-row-reverse items-center gap-10"
+            variants={fadeInUp}
+          >
             <div className="md:w-1/2 text-center md:text-left">
-              <p className="uppercase text-lg font-semibold text-[#2A428C] mb-2">
+              <motion.p 
+                className="uppercase text-lg font-semibold text-[#2A428C] mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
                 WATCH
-              </p>
-              <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
+              </motion.p>
+              <motion.h3 
+                className="text-2xl md:text-5xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
                 Formatting Tips For <br />
                 <span className="custom-text-gradient">Print Books</span>
-              </h3>
-              <p className="text-gray-700 mb-6 text-base md:text-lg">
+              </motion.h3>
+              <motion.p 
+                className="text-gray-700 mb-6 text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
                 Discover industry formatting standards, layout best practices,
                 and design tips to make your book print-ready.
-              </p>
-              <button className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full">
+              </motion.p>
+              <motion.button 
+                className="bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] text-white font-semibold py-2 px-4 rounded-full"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Watch Now
-              </button>
+              </motion.button>
             </div>
-            <div className="md:w-1/2 flex justify-center">
+            <motion.div 
+              className="md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
               <div className="relative w-60 h-60 sm:w-90 sm:h-90">
                 <Image
                   src={img3}
@@ -138,29 +277,60 @@ const GuideTemplate = () => {
                   className="object-contain"
                 />
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Feature 3 */}
-          <div className="flex flex-col md:flex-row items-center gap-10">
+          <motion.div 
+            className="flex flex-col md:flex-row items-center gap-10"
+            variants={fadeInUp}
+          >
             <div className="md:w-1/2 text-center md:text-left">
-              <p className="uppercase text-lg font-semibold text-[#2A428C] mb-2">
+              <motion.p 
+                className="uppercase text-lg font-semibold text-[#2A428C] mb-2"
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
                 CREATE
-              </p>
-              <h3 className="text-2xl md:text-5xl font-bold text-gray-900 mb-4">
+              </motion.p>
+              <motion.h3 
+                className="text-2xl md:text-5xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
                 Free New User{" "}
                 <span className="custom-text-gradient">Guide</span>
-              </h3>
-              <p className="text-gray-700 mb-6 text-base md:text-lg">
+              </motion.h3>
+              <motion.p 
+                className="text-gray-700 mb-6 text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+              >
                 Explore how to get started with our services using our free user
                 guide. Learn how to upload, format, and print your first
                 project.
-              </p>
-              <button className="custom-btn-gradient text-white font-semibold py-2 px-4 rounded-full">
+              </motion.p>
+              <motion.button 
+                className="custom-btn-gradient text-white font-semibold py-2 px-4 rounded-full"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 Read More
-              </button>
+              </motion.button>
             </div>
-            <div className="md:w-1/2 flex justify-center">
+            <motion.div 
+              className="md:w-1/2 flex justify-center"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
               <div className="relative w-60 h-60 sm:w-90 sm:h-90">
                 <Image
                   src={img3}
@@ -169,12 +339,18 @@ const GuideTemplate = () => {
                   className="object-contain"
                 />
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 py-16">
+      <motion.div 
+        className="max-w-7xl mx-auto px-4 py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+      >
         {/* Popular Book Formats */}
         <motion.h2
           className="text-5xl font-bold text-center mb-8"
@@ -186,9 +362,20 @@ const GuideTemplate = () => {
           Popular Book <span className="custom-text-gradient"> Formats</span>
         </motion.h2>
 
-        <div className="flex flex-wrap justify-center gap-5 py-10">
+        <motion.div 
+          className="flex flex-wrap justify-center gap-5 py-10"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {/* A5 Format Card */}
-          <div className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl">
+          <motion.div 
+            className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl"
+            variants={fadeInUp}
+            whileHover={{ y: -10 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
             <div className="p-6 flex flex-col h-full">
               <img
                 src="https://fastprintguys.com/wp-content/uploads/2025/05/image-31-1.png"
@@ -220,10 +407,15 @@ const GuideTemplate = () => {
                 Starting At 2.55 USD
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* US Trade Format Card */}
-          <div className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl">
+          <motion.div 
+            className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl"
+            variants={fadeInUp}
+            whileHover={{ y: -10 }}
+            transition={{ delay: 0.1, type: "spring", stiffness: 300 }}
+          >
             <div className="p-6 flex flex-col h-full">
               <img
                 src="https://fastprintguys.com/wp-content/uploads/2025/05/image-31-1.png"
@@ -254,11 +446,15 @@ const GuideTemplate = () => {
                 Starting At 4.11 USD
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* US Letter Format Card */}
-
-          <div className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl">
+          <motion.div 
+            className="group bg-gray-100 rounded-2xl shadow-md w-full max-w-[350px] transition duration-300 cursor-pointer overflow-hidden flex flex-col hover:bg-gradient-to-b from-[#0096CD] to-[#016AB3] transform hover:scale-105 hover:shadow-2xl"
+            variants={fadeInUp}
+            whileHover={{ y: -10 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 300 }}
+          >
             <div className="p-6 flex flex-col h-full">
               <img
                 src="https://fastprintguys.com/wp-content/uploads/2025/05/image-31-1.png"
@@ -290,11 +486,24 @@ const GuideTemplate = () => {
                 Starting At 11.43 USD
               </div>
             </div>
-          </div>
-          <section className="w-full bg-white pt-16 px-4 md:px-16">
+          </motion.div>
+          
+          <motion.section 
+            className="w-full bg-white pt-16 px-4 md:px-16"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+          >
             <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-20 border-y border-dashed border-blue-400 py-12">
               {/* Left Content */}
-              <div className="flex-1 text-center lg:text-left">
+              <motion.div 
+                className="flex-1 text-center lg:text-left"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   Book Design{" "}
                   <span className="custom-text-gradient">Templates</span>
@@ -332,9 +541,13 @@ const GuideTemplate = () => {
                     <option value="whitepaper">Research Whitepaper</option>
                   </select>
 
-                  <button className="custom-btn-gradient text-white p-4 px-10  rounded-md transition">
+                  <motion.button 
+                    className="custom-btn-gradient text-white p-4 px-10  rounded-md transition"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
                     <FaDownload />
-                  </button>
+                  </motion.button>
                 </div>
 
                 <h3 className="text-lg font-semibold mb-1">
@@ -344,20 +557,26 @@ const GuideTemplate = () => {
                   Use Our Pricing Calculator To See Print Costs And Download A
                   Custom Cover Template Using Your Exact Page Count.
                 </p>
-              </div>
+              </motion.div>
 
               {/* Right Image */}
-              <div className="flex-1 flex justify-center lg:justify-end">
+              <motion.div 
+                className="flex-1 flex justify-center lg:justify-end"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
                 <img
                   src="https://fastprintguys.com/wp-content/uploads/2025/05/Group-1261153732.png"
                   alt="Laptop Graphic"
                   className="w-full max-w-[500px] h-auto object-contain"
                 />
-              </div>
+              </motion.div>
             </div>
-          </section>
-        </div>
-      </div>
+          </motion.section>
+        </motion.div>
+      </motion.div>
 
       {/* FAQ */}
       <Faq />
