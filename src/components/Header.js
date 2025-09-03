@@ -90,6 +90,7 @@ const Header = () => {
               { href: "/calculator/printbook", label: "Pricing" },
               { href: "/print-shop", label: "Print Shop" },
               { href: "/portfolio", label: "Portfolio" },
+              { href: "/services", label: "Services" },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -239,6 +240,7 @@ const Header = () => {
                 { href: "/calculator/printbook", label: "Pricing" },
                 { href: "/print-shop", label: "Print Shop" },
                 { href: "/portfolio", label: "Portfolio" },
+                { href: "/services", label: "Services" },
               ].map((item) => (
                 <Link
                   key={item.href}

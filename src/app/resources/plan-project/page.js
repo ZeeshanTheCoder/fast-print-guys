@@ -7,9 +7,7 @@ import { motion } from "framer-motion";
 import maskgroup from "@/assets/images/plan-mask-group.png";
 import bannerimg from "@/assets/images/banner/plan-banner.png";
 import ourBlogBGImg from "@/assets/images/our-blog-bg-img.png";
-import a5Image from "@/assets/images/image-30-1.png";
-import usTradeImage from "@/assets/images/image-31-1.png";
-import usLetterImage from "@/assets/images/image-32-1.png";
+
 import img1 from "@/assets/images/image-2.png";
 import img2 from "@/assets/images/image-3.png";
 import img3 from "@/assets/images/image-4.png";
