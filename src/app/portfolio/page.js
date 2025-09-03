@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import portfolioImg from '@/assets/images/img75.png';
+import Image from 'next/image';
 
 const Portfolio = () => {
   const router = useRouter();
@@ -280,8 +281,8 @@ const Portfolio = () => {
           <div className="flex-1 scroll-animate slide-in-right">
             <div className="relative">
               <div className="absolute -inset-4 bg-gradient-to-r from-orange-500 to-pink-500 rounded-2xl blur opacity-30 float"></div>
-              <img
-                src={portfolioImg.src}
+              <Image
+                src={portfolioImg}
                 alt="Fast Print Guys Portfolio"
                 className="relative w-full max-w-lg h-auto object-cover rounded-2xl shadow-2xl hover-lift"
               />
@@ -674,7 +675,7 @@ const Portfolio = () => {
           onClick={() => setSelectedImage(null)}
         >
           <div className="relative max-w-4xl max-h-full">
-            <img
+            <Image
               src={selectedImage.image}
               alt={selectedImage.title}
               className="max-w-full max-h-full object-contain rounded-lg"
