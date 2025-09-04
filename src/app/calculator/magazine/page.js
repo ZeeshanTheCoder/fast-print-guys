@@ -508,7 +508,7 @@ const MagazineCalculator = () => {
                   onChange={handleChange}
                   options={TRIM_SIZES}
                   placeholder="Select Book Size"
-                  className="h-12"
+                  className="h-12 bg-white"
                 />
               </div>
               <div className="w-full sm:w-1/2 flex flex-col">

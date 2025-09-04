@@ -254,10 +254,8 @@ const Publishing = () => {
                   whileHover={{ y: -5 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <motion.div
+                  <div
                     className="m-2 h-48 relative"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
                   >
                     <Image
                       src={service.image}
@@ -265,7 +263,7 @@ const Publishing = () => {
                       fill
                       className="object-cover rounded-xl"
                     />
-                  </motion.div>
+                  </div>
                   <div className="p-5">
                     <h3 className="text-lg group-hover:text-white font-bold text-center text-black mb-2">
                       {service.title}

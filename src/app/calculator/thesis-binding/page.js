@@ -223,7 +223,7 @@ const Input = ({
     value={value}
     onChange={onChange}
     placeholder={placeholder}
-    className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+    className="w-full border bg-white border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
     disabled={disabled}
     min={min}
     max={max}
@@ -236,7 +236,7 @@ const Select = ({ name, value, onChange, options, placeholder }) => (
     name={name}
     value={value}
     onChange={onChange}
-    className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+    className="w-full bg-white border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
     required
   >
     <option value="">{placeholder}</option>
@@ -535,7 +535,6 @@ const ThesisPricingCalculator = () => {
                   min="1"
                   max="800"
                   disabled={!isStepAccessible("pageCount")}
-                  className="bg-white text-black"
                 />
               </div>
             </div>

@@ -437,7 +437,7 @@ const PrintBookCalculator = () => {
                   onChange={handleChange}
                   options={BOOK_SIZES}
                   placeholder="Select Book Size"
-                  className="h-12"
+                  className="h-12 bg-white"
                 />
               </div>
               <div className="w-full sm:w-1/2 flex flex-col">

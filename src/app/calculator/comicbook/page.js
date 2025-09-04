@@ -478,7 +478,7 @@ const ComicBookCalculator = () => {
                   name="trim_size_id"
                   value={form.trim_size_id}
                   onChange={handleChange}
-                  className="h-12 w-full border px-3 py-2 rounded"
+                  className="h-12 w-full border px-3 py-2 rounded bg-white"
                   required
                 >
                   <option value="">Select Trim Size</option>

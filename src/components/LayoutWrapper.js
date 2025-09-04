@@ -1,18 +1,54 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
-import Header from './Header';
-import Footer from './Footer';
+import { useContext } from "react";
+import { AuthContext } from "@/context/authContext";
+import { usePathname } from "next/navigation";
+import Header from "./Header";
+import Footer from "./Footer";
+import AdminHeader from "./AdminHeader";
 
-export default function LayoutWrapper({ children }) {
+const LayoutWrapper = ({ children }) => {
+  const context = useContext(AuthContext);
   const pathname = usePathname();
-  const isPublic = pathname === '/login' || pathname === '/signup';
 
+  const authRoutes = ["/login", "/signup"];
+
+  // Skip layout for login/signup
+  if (authRoutes.includes(pathname)) {
+    return <>{children}</>;
+  }
+
+  // Extract user from context
+  const { user } = context || {};
+
+  if (user) {
+    console.log("User role:", user.role); // Check actual value
+  }
+
+  // Wait until context is loaded
+  if (!context) {
+    return <div>Loading...</div>;
+  }
+
+  // If user is admin, show ONLY AdminHeader (not Header)
+  if (user && user.is_admin) {
+    return (
+      <>
+        <AdminHeader />
+        <main>{children}</main>
+        <Footer />
+      </>
+    );
+  }
+
+  // For all other logged-in or public users (non-admin), show default layout
   return (
     <>
-      {!isPublic && <Header />}
-      {children}
-      {!isPublic && <Footer />}
+      <Header />
+      <main>{children}</main>
+      <Footer />
     </>
   );
-}
+};
+
+export default LayoutWrapper;
