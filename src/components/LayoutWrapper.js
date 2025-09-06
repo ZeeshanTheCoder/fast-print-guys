@@ -21,10 +21,6 @@ const LayoutWrapper = ({ children }) => {
   // Extract user from context
   const { user } = context || {};
 
-  if (user) {
-    console.log("User role:", user.role); // Check actual value
-  }
-
   // Wait until context is loaded
   if (!context) {
     return <div>Loading...</div>;
