@@ -1,6 +1,6 @@
 "use client";
 // app/start-project/page.jsx
-import { useRouter } from "next/navigation"; // Next.js v13+ hook for programmatic navigation
+import { useRouter, useSearchParams } from "next/navigation"; // Next.js v13+ hook for programmatic navigation
 import { useState, useEffect } from "react";
 
 // Images
@@ -70,10 +70,36 @@ const productCards = [
 
 export default function StartProject() {
   const router = useRouter(); // Use Next.js router
+  const searchParams = useSearchParams();
   const [text, setText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+
+  const isEdit = searchParams.get("edit") === "true";
+
+  useEffect(() => {
+    const storedProjectData = localStorage.getItem("projectData");
+    if (storedProjectData) {
+      const projectData = JSON.parse(storedProjectData);
+      if (projectData.projectId) {
+        setSelectedId(projectData.projectId);
+      }
+      if (projectData.projectTitle) {
+        setText(projectData.projectTitle);
+      }
+      if (projectData.language) {
+        setSelectedLanguage(projectData.language);
+      }
+      if (projectData.category) {
+        setSelectedCategory(projectData.category);
+      }
+      if (projectData.genre) {
+        setSelectedGenre(projectData.genre);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     console.log("Selected Language:", selectedLanguage);
@@ -93,15 +119,18 @@ export default function StartProject() {
       return;
     }
 
-    // Navigate to design project page with state
-    router.push("/design-project", {
-      state: {
-        projectTitle: text,
-        language: selectedLanguage,
-        category: selectedCategory,
-        genre: selectedGenre,
-      },
-    });
+    const projectData = {
+      projectId: selectedId,
+      projectTitle: text,
+      genre: selectedGenre,
+      language: selectedLanguage,
+      category: selectedCategory,
+    };
+
+    localStorage.setItem("projectData", JSON.stringify(projectData));
+    const targetUrl = isEdit ? '/design-project?edit=true' : '/design-project';
+
+    router.push(targetUrl);
   };
 
   return (
@@ -199,6 +228,7 @@ export default function StartProject() {
                         <Image
                           src={product.image}
                           alt={product.title}
+                          width={300}
                           className="relative z-10 max-w-full max-h-full object-contain transform group-hover:scale-105 sm:group-hover:scale-110 transition-transform duration-500 ease-out filter group-hover:brightness-110"
                         />
                       </div>

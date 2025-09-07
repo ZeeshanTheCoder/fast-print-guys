@@ -172,7 +172,7 @@ const Home = () => {
       {/* Services Section */}
       <div className="w-full min-h-screen flex justify-center items-center px-0 py-10 bg-transparent -mt-12 rounded-t-lg">
         <div
-          className="w-full min-h-screen rounded-none backdrop-blur-[200px] bg-gradient-to-br from-blue-100 via-pink-100 to-blue-100 flex flex-col px-8 py-12 relative overflow-hidden"
+          className="w-full min-h-screen rounded-none backdrop-blur-[200px] bg-gradient-to-br from-blue-100 via-pink-100 to-blue-100 flex flex-col sm:px-8 py-12 relative overflow-hidden"
           style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
           id="services-section"
         >
@@ -215,7 +215,7 @@ const Home = () => {
             ></div>
           </div>
 
-          <div className="w-full flex flex-col md:flex-row md:items-center md:justify-between mb-12 pl-12 md:pl-0 relative z-10">
+          <div className="w-full flex flex-col md:flex-row md:items-center md:justify-between mb-12 pl-12 md:pl-0 px-8 relative z-10">
             <div className="relative">
               <h2 className="font-extrabold mb-4 text-gray-900 animate-fadeInLeft text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight sm:leading-snug md:leading-tight lg:leading-snug">
                 <span className="inline-block hover:scale-110 transition-transform duration-300">
