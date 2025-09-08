@@ -63,10 +63,7 @@ const ManageOrders = () => {
 
   // Handle title click to navigate to OrderInfo
   const handleTitleClick = (order) => {
-    router.push("/admin/order-info");
-    // Pass data via state (only works if using App Router with client components and router.push + state)
-    // Note: Next.js doesn't support state via router.push by default. Use URL params, context, or localStorage.
-    // As a workaround, we temporarily store in localStorage:
+    router.push("/admin/orders/order-info");
     localStorage.setItem("orderData", JSON.stringify(order));
   };
 

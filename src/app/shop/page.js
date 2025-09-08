@@ -171,6 +171,8 @@ const Shop = () => {
         })
       );
 
+      // localStorage.removeItem('shopData');
+
       router.push("/payment");
     } catch (error) {
       console.error(

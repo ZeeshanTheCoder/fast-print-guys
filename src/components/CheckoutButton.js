@@ -71,11 +71,12 @@ const CheckoutButton = ({ lineItems }) => {
   };
 
   return (
-    <div className="w-full">
-      <button
-        onClick={handleClick}
-        disabled={isLoading}
-        className={`
+    <>
+      <div className="w-full">
+        <button
+          onClick={handleClick}
+          disabled={isLoading}
+          className={`
           w-full py-3 px-6 rounded-full font-medium text-white transition-all duration-200
           ${
             isLoading
@@ -83,28 +84,28 @@ const CheckoutButton = ({ lineItems }) => {
               : "bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 active:from-blue-800 active:to-blue-950 shadow-md hover:shadow-lg"
           }
         `}
-      >
-        {isLoading ? (
-          <div className="flex items-center justify-center gap-2">
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span>Processing...</span>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center gap-2">
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.9996 2C11.4996 2 10.9996 2.3 10.7996 2.8L8.79961 7.2H5.59961C4.69961 7.2 3.99961 7.9 3.99961 8.8C3.99961 8.9 4.09961 9 4.19961 9.1L7.49961 14.5L5.49961 19.9C5.29961 20.4 5.49961 21 5.99961 21.3C6.29961 21.5 6.69961 21.5 6.99961 21.4L11.9996 19.4L16.9996 21.4C17.2996 21.5 17.6996 21.5 17.9996 21.3C18.4996 21 18.6996 20.4 18.4996 19.9L16.4996 14.5L19.7996 9.1C19.8996 9 19.9996 8.9 19.9996 8.8C19.9996 7.9 19.2996 7.2 18.3996 7.2H15.1996L13.1996 2.8C12.9996 2.3 12.4996 2 11.9996 2Z" />
-            </svg>
-            <span>Pay with Card</span>
-          </div>
-        )}
-      </button>
-
+        >
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <span>Processing...</span>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center gap-2">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.9996 2C11.4996 2 10.9996 2.3 10.7996 2.8L8.79961 7.2H5.59961C4.69961 7.2 3.99961 7.9 3.99961 8.8C3.99961 8.9 4.09961 9 4.19961 9.1L7.49961 14.5L5.49961 19.9C5.29961 20.4 5.49961 21 5.99961 21.3C6.29961 21.5 6.69961 21.5 6.99961 21.4L11.9996 19.4L16.9996 21.4C17.2996 21.5 17.6996 21.5 17.9996 21.3C18.4996 21 18.6996 20.4 18.4996 19.9L16.4996 14.5L19.7996 9.1C19.8996 9 19.9996 8.9 19.9996 8.8C19.9996 7.9 19.2996 7.2 18.3996 7.2H15.1996L13.1996 2.8C12.9996 2.3 12.4996 2 11.9996 2Z" />
+              </svg>
+              <span>Pay with Card</span>
+            </div>
+          )}
+        </button>
+      </div>
       {error && (
         <div className="mt-3 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
           {error}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

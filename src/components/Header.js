@@ -125,7 +125,6 @@ const Header = () => {
                       "publishing",
                       "contact-resources",
                       "hire-professional",
-                      "order-lookup",
                       "plan-project",
                     ].map((slug) => (
                       <Link
@@ -279,7 +278,6 @@ const Header = () => {
                       "publishing",
                       "contact-resources",
                       "hire-professional",
-                      "order-lookup",
                       "plan-project",
                     ].map((slug) => (
                       <Link
