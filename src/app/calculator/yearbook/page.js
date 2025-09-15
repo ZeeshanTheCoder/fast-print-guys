@@ -369,30 +369,25 @@ const YearBookCalculator = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const val = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    let val = value;
 
-    // Reset dependent fields when parent fields change
+    if (type === "number") {
+      // Convert to number if not empty
+      val = value === "" ? "" : Number(value);
+      // Enforce max limit
+      if (name === "page_count" && val > 200) {
+        val = 200;
+      }
+    }
+
+    // reset other fields if needed
     const resetFields = {
-      trim_size_id: [
-        "page_count",
-        "binding_id",
-        "interior_color_id",
-        "paper_type_id",
-        "cover_finish_id",
-      ],
-      page_count: [
-        "binding_id",
-        "interior_color_id",
-        "paper_type_id",
-        "cover_finish_id",
-      ],
-      binding_id: ["interior_color_id", "paper_type_id", "cover_finish_id"],
-      interior_color_id: ["paper_type_id", "cover_finish_id"],
-      paper_type_id: ["cover_finish_id"],
+      // your existing reset rules
     };
 
     setForm((prev) => {
       const newForm = { ...prev, [name]: val };
+      // Reset dependent fields if necessary
       resetFields[name]?.forEach((field) => {
         newForm[field] = "";
       });

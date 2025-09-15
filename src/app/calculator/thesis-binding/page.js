@@ -453,10 +453,19 @@ const ThesisPricingCalculator = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const val = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    let val = value;
+
+    if (type === "number") {
+      val = value === "" ? "" : Number(value);
+      // Enforce maximum of 800 for pageCount
+      if (name === "pageCount" && val > 800) {
+        val = 800;
+      }
+    }
 
     setForm((prev) => {
       const newForm = { ...prev, [name]: val };
+      // Optionally, reset subsequent fields
       const currentIndex = fieldOrder.indexOf(name);
       if (currentIndex !== -1) {
         fieldOrder.slice(currentIndex + 1).forEach((field) => {
@@ -532,8 +541,8 @@ const ThesisPricingCalculator = () => {
                   onChange={handleChange}
                   type="number"
                   placeholder="Enter Page Count"
-                  min="1"
-                  max="800"
+                  min="3"
+                  max="800" // already set
                   disabled={!isStepAccessible("pageCount")}
                 />
               </div>

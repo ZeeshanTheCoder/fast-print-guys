@@ -21,21 +21,12 @@ const CoverExpert = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [projectData, setProjectData] = useState(null);
   const [designForm, setDesignForm] = useState(null);
-  const [dropdowns, setDropdowns] = useState({});
+  // ✅ REMOVED: const [dropdowns, setDropdowns] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const fetchDropdownData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}api/book/dropdown-data/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setDropdowns(response.data);
-    } catch (error) {
-      console.error("Error fetching dropdown data:", error);
-    }
-  };
+  // ✅ REMOVED: fetchDropdownData function
 
   useEffect(() => {
     const savedProject = localStorage.getItem("projectData");
@@ -51,7 +42,7 @@ const CoverExpert = () => {
         });
       }
     }
-    if (token) fetchDropdownData();
+    // ✅ REMOVED: if (token) fetchDropdownData();
   }, [token]);
 
   const validateForm = () => {

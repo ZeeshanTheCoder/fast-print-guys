@@ -201,18 +201,30 @@ const OptionField = ({
 );
 
 const NavBar = ({ navigate }) => (
-  <div className="w-full h-[51px] flex items-center justify-center gap-4 md:gap-8 px-4 md:px-6 bg-gradient-to-r from-[#016AB3] via-[#0096CD] to-[#00AEDC] font-sans overflow-x-auto">
+  <div
+    className="w-full h-auto min-h-[51px] flex items-center justify-center gap-2 sm:gap-4 md:gap-8 px-2 sm:px-4 py-2"
+    style={{
+      background:
+        "linear-gradient(90deg, #016AB3 16.41%, #0096CD 60.03%, #00AEDC 87.93%)",
+    }}
+  >
     <span
-      className="text-white text-base md:text-lg font-semibold cursor-pointer whitespace-nowrap"
+      className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-semibold cursor-pointer pb-1 px-2 py-1 border-b-2 sm:border-b-4 border-transparent hover:border-yellow-400 transition-all text-center whitespace-nowrap"
       onClick={() => navigate("/start-project")}
     >
       Start Project
     </span>
     <span
-      className="text-white text-base md:text-lg font-semibold cursor-pointer whitespace-nowrap"
+      className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-semibold cursor-pointer pb-1 px-2 py-1 border-b-2 sm:border-b-4 border-transparent hover:border-yellow-400 transition-all text-center whitespace-nowrap"
       onClick={() => navigate("/design-project")}
     >
       Designs
+    </span>
+    <span
+      className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-semibold cursor-pointer pb-1 px-2 py-1 border-b-2 sm:border-b-4 border-transparent hover:border-yellow-400 transition-all text-center whitespace-nowrap"
+      onClick={() => navigate("/book-preview")}
+    >
+      Book Preview
     </span>
   </div>
 );
@@ -398,6 +410,10 @@ const CoverDesign = ({
   </div>
 );
 
+const handlePrintAndSubmit = () => {
+  handleSubmit(); // Call your existing submission logic
+};
+
 const DesignProject = () => {
   const { token } = useContext(AuthContext);
   const router = useRouter();
@@ -439,26 +455,28 @@ const DesignProject = () => {
   const updateForm = (updates) =>
     setState((prev) => ({ ...prev, form: { ...prev.form, ...updates } }));
 
-  // Checking ProjctId is in the lcoalStorage
-  const projectDataStr = localStorage.getItem("projectData");
-  const projectData = projectDataStr ? JSON.parse(projectDataStr) : null;
-  const hasProjectId = projectData && projectData.projectId;
+  // State for project data and ID
+  const [hasProjectId, setHasProjectId] = useState(false);
 
-  // Get projectData from localStorage or URL state (Next.js doesn't support location.state)
+  // ✅ FIXED: Get projectData from localStorage - client-side only
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("projectData");
-      if (saved) {
-        const data = JSON.parse(saved);
-        updateState({ projectData: JSON.parse(saved) });
-      } else {
-        // Optional: Redirect if no data
-        router.push("/start-project");
+      // Check if we're in the browser
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("projectData");
+        if (saved) {
+          const data = JSON.parse(saved);
+          updateState({ projectData: data }); // ✅ Fixed: Don't double-parse
+          setHasProjectId(!!(data && data.projectId));
+        } else {
+          // Optional: Redirect if no data
+          router.push("/start-project");
+        }
       }
     } catch (e) {
       console.warn("No project data found in localStorage");
     }
-  }, []);
+  }, [router]);
 
   const isCalendarCategory = (category) =>
     category === "Calender" || category === "Calendar";
@@ -1093,7 +1111,7 @@ const DesignProject = () => {
             }),
         }
       );
-      
+
       // localStorage.removeItem("projectData");
 
       if (response.data?.status === "success") {
@@ -1368,6 +1386,7 @@ const DesignProject = () => {
                 name="quantity"
                 value={state.form.quantity}
                 onChange={handleChange}
+                step={1}
                 className="w-full border px-3 py-2 rounded"
               />
             </div>
@@ -1441,6 +1460,26 @@ const DesignProject = () => {
       <NavBar navigate={router.push} />
       <div className="w-full min-h-screen px-4 md:px-6 py-6 md:py-10 bg-gradient-to-br from-[#eef4ff] to-[#fef6fb] font-sans">
         <div className="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 rounded-xl md:rounded-2xl shadow-xl bg-gradient-to-r from-[#ffe4ec] via-[#fdfdfd] to-[#e0f3ff] flex flex-col gap-6 md:gap-8 lg:gap-10">
+          <div className="relative flex justify-center items-center px-2">
+            <div
+              className="absolute left-0 right-0 h-[2px] sm:h-[3px] lg:h-[4px]"
+              style={{
+                background:
+                  "linear-gradient(90deg, #D15D9E 38.04%, #5D4495 121.51%)",
+              }}
+            />
+            <div
+              className="h-[35px] sm:h-[42px] lg:h-[47px] w-full max-w-[300px] sm:max-w-[380px] lg:max-w-[440px] mx-2 sm:mx-4 flex items-center justify-center text-white font-medium text-xs sm:text-sm lg:text-base z-10 px-2 sm:px-4"
+              style={{
+                background:
+                  "linear-gradient(90deg, #D15D9E 38.04%, #5D4495 121.51%)",
+                borderRadius: "120px",
+              }}
+            >
+              Design Your Project
+            </div>
+          </div>
+
           {state.projectData && (
             <ProjectDetails projectData={state.projectData} />
           )}
@@ -1478,12 +1517,108 @@ const DesignProject = () => {
             </button>
 
             <button
+              onClick={() => {
+                // ✅ NEW: Validate all required fields before proceeding
+                const isCalendar = state.projectData?.category === "Calender";
+                const requiredFields = isCalendar
+                  ? [
+                      "binding_id",
+                      "interior_color_id",
+                      "paper_type_id",
+                      "cover_finish_id",
+                    ]
+                  : [
+                      "trim_size_id",
+                      "page_count",
+                      "binding_id",
+                      "interior_color_id",
+                      "paper_type_id",
+                      "cover_finish_id",
+                    ];
+
+                // Check if any required field is empty
+                const missingFields = requiredFields.filter(
+                  (field) => !state.form[field]
+                );
+
+                if (missingFields.length > 0) {
+                  alert(
+                    "Please complete all book configuration options before previewing."
+                  );
+                  return; // Stop execution if fields are missing
+                }
+
+                // Check if PDF file is uploaded
+                if (!state.selectedFile) {
+                  alert("Please upload your book PDF file first.");
+                  return;
+                }
+
+                if (!state.coverFile) {
+                  alert(
+                    "Please upload your book cover design before previewing."
+                  );
+                  return;
+                }
+
+                // Save ALL necessary data to localStorage for the preview
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                  const pdfDataUrl = e.target.result; // This is the data URL
+                  // Save PDF Data URL
+                  localStorage.setItem("previewPdfDataUrl", pdfDataUrl);
+                  // Save Form Data
+                  localStorage.setItem(
+                    "previewFormData",
+                    JSON.stringify(state.form)
+                  );
+                  // Save Project Data
+                  localStorage.setItem(
+                    "previewProjectData",
+                    JSON.stringify(state.projectData)
+                  );
+                  // ✅ Calculate and save shopData
+                  const quantity = state.form.quantity || 0;
+                  const originalTotalCost =
+                    state.result?.original_total_cost ??
+                    (state.result?.cost_per_book ?? 0) * quantity;
+                  const finalTotalCost =
+                    state.result?.total_cost ?? originalTotalCost;
+                  localStorage.setItem(
+                    "shopData",
+                    JSON.stringify({
+                      originalTotalCost: state.result?.original_total_cost ?? 0,
+                      finalTotalCost: state.result?.total_cost ?? 0,
+                      totalCost: state.result?.total_cost ?? 0,
+                      initialQuantity: state.form.quantity,
+                      costPerBook: state.result?.cost_per_book ?? 0,
+                    })
+                  );
+                  // Save the actual File objects for final submission
+                  window.tempBookFileForSubmission = state.selectedFile;
+                  if (state.coverFile) {
+                    window.tempCoverFileForSubmission = state.coverFile;
+                  }
+                  // Navigate to preview
+                  router.push("/book-preview");
+                };
+                reader.onerror = function () {
+                  alert("Failed to prepare PDF for preview.");
+                };
+                reader.readAsDataURL(state.selectedFile);
+              }}
+              className={`w-full max-w-md md:max-w-lg lg:max-w-xl px-6 md:px-10 py-2 md:py-3 bg-gradient-to-r from-[#0a79f8] to-[#1e78ee] text-white font-medium text-sm md:text-base rounded-full shadow-md hover:shadow-lg transition `}
+            >
+              Preview Your Book
+            </button>
+
+            {/* <button
               onClick={handleSubmit}
               disabled={state.uploadStatus === "uploading"}
               className="w-full max-w-md md:max-w-lg lg:max-w-xl px-6 md:px-10 py-2 md:py-3 bg-gradient-to-r from-[#F8C20A] to-[#EE831E] text-white font-medium text-sm md:text-base rounded-full shadow-md hover:shadow-lg"
             >
               Print Your Book
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

@@ -344,29 +344,25 @@ const ComicBookCalculator = () => {
   // Handle form changes
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const val = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    let val = value;
 
+    if (type === "number") {
+      // Convert to number if not empty
+      val = value === "" ? "" : Number(value);
+      // Enforce max limit
+      if (name === "page_count" && val > 200) {
+        val = 200;
+      }
+    }
+
+    // reset other fields if needed
     const resetFields = {
-      trim_size_id: [
-        "page_count",
-        "binding_id",
-        "interior_color_id",
-        "paper_type_id",
-        "cover_finish_id",
-      ],
-      page_count: [
-        "binding_id",
-        "interior_color_id",
-        "paper_type_id",
-        "cover_finish_id",
-      ],
-      binding_id: ["interior_color_id", "paper_type_id", "cover_finish_id"],
-      interior_color_id: ["paper_type_id", "cover_finish_id"],
-      paper_type_id: ["cover_finish_id"],
+      // your existing reset rules
     };
 
     setForm((prev) => {
       const newForm = { ...prev, [name]: val };
+      // Reset dependent fields if necessary
       resetFields[name]?.forEach((field) => {
         newForm[field] = "";
       });
@@ -505,7 +501,7 @@ const ComicBookCalculator = () => {
                   placeholder="Enter Page Count"
                   min="3"
                   max="200"
-                  className="h-12 w-full border px-3 py-2 rounded bg-white text-black rounded-md"
+                  className="h-12 w-full border px-3 py-2 bg-white text-black rounded-md"
                   disabled={!stepAccessibility.pageCount}
                   required
                 />

@@ -730,7 +730,16 @@ const PhotoBookCalculator = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const val = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    let val = value;
+
+    if (type === "number") {
+      val = value === "" ? "" : Number(value);
+      // Clamp page_count to 800
+      if (name === "page_count" && val > 800) {
+        val = 800;
+      }
+    }
+
     const resetFields = {
       bookSize: [
         "page_count",
@@ -855,8 +864,8 @@ const PhotoBookCalculator = () => {
                     onChange={handleChange}
                     type="number"
                     placeholder="Enter Page Count"
-                    min="2"
-                    max="800"
+                    min={2}
+                    max={800} // already set
                     className="h-12 bg-white text-black rounded-md"
                     disabled={!stepAccessibility.pageCount}
                   />

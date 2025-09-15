@@ -128,7 +128,7 @@ export default function StartProject() {
     };
 
     localStorage.setItem("projectData", JSON.stringify(projectData));
-    const targetUrl = isEdit ? '/design-project?edit=true' : '/design-project';
+    const targetUrl = isEdit ? "/design-project?edit=true" : "/design-project";
 
     router.push(targetUrl);
   };
@@ -155,6 +155,12 @@ export default function StartProject() {
         >
           Designs
         </span>
+        <span
+          className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-semibold cursor-pointer pb-1 px-2 py-1 border-b-2 sm:border-b-4 border-transparent hover:border-yellow-400 transition-all text-center whitespace-nowrap"
+          onClick={() => router.push("/book-preview")}
+        >
+          Book Preview
+        </span>
       </div>
 
       <div
@@ -165,7 +171,7 @@ export default function StartProject() {
           paddingBottom: "20px",
         }}
       >
-        <div className="w-full flex justify-center items-start">
+        <div className="w-full sm:px-24 sm:py-10 flex justify-center items-start">
           <div
             className="rounded-xl sm:rounded-2xl shadow-lg pt-4 sm:pt-6 lg:pt-8 pb-6 sm:pb-8 lg:pb-10 px-2 sm:px-4 lg:px-8 flex flex-col gap-4 sm:gap-6 w-full max-w-7xl mx-auto"
             style={{

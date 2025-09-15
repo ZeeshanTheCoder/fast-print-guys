@@ -371,7 +371,15 @@ const MagazineCalculator = () => {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    const val = type === "number" ? (value === "" ? "" : Number(value)) : value;
+    let val = value;
+
+    if (type === "number") {
+      val = value === "" ? "" : Number(value);
+      // Clamp page_count to 200
+      if (name === "page_count" && val > 200) {
+        val = 200;
+      }
+    }
 
     const resetFields = {
       trim_size_id: [
@@ -525,8 +533,8 @@ const MagazineCalculator = () => {
                   onChange={handleChange}
                   type="number"
                   placeholder="Enter Page Count"
-                  min="3"
-                  max="200"
+                  min={3}
+                  max={200} // already set
                   className="h-12 bg-white text-black rounded-md"
                   disabled={!stepAccessibility.pageCount}
                 />
