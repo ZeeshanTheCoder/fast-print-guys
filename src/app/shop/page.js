@@ -334,7 +334,7 @@ const Shop = () => {
     "w-full py-2 md:py-3 text-white font-medium text-sm rounded-full shadow-md hover:shadow-lg transition-all duration-200";
 
   const handleEditClick = () => {
-    router.back(); // Go back to previous page
+    router.push('/design-project')
   };
 
   return (

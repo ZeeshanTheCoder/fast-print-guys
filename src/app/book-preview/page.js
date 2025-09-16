@@ -2,11 +2,11 @@
 
 import { useEffect, useState, useRef, useContext } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import PersonalIcon from "@/assets/images/newsletter.png";
 import { AuthContext } from "@/context/authContext";
 import axios from "axios";
 import { BASE_URL } from "@/services/baseUrl";
-import Image from "next/image";
+import HTMLFlipBook from "react-pageflip";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const API_BASE = `${BASE_URL}`;
 
@@ -61,17 +61,33 @@ const BookPreview = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // State for PDF rendering
   const [pdfDataUrl, setPdfDataUrl] = useState(null);
   const [pdfDocument, setPdfDocument] = useState(null);
   const [numPages, setNumPages] = useState(0);
-  const [currentPages, setCurrentPages] = useState([1, 2]);
-  const [renderedPages, setRenderedPages] = useState([null, null]);
+  const [renderedPages, setRenderedPages] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // State for project/form data
-  const [projectData, setProjectData] = useState(null);
+  const bookRef = useRef();
 
-  // Effect to load data from localStorage on component mount
+  // detect screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (numPages > 0) {
+      if (isMobile) {
+        setCurrentPage(1); // mobile -> ek hi page
+      } else {
+        setCurrentPage([1, numPages > 1 ? 2 : null]); // desktop -> left-right
+      }
+    }
+  }, [numPages, isMobile]);
+
   useEffect(() => {
     const savedPdfDataUrl = localStorage.getItem("previewPdfDataUrl");
     const savedProjectData = localStorage.getItem("previewProjectData");
@@ -84,20 +100,17 @@ const BookPreview = () => {
     }
 
     if (savedProjectData) {
-      setProjectData(JSON.parse(savedProjectData));
+      JSON.parse(savedProjectData);
     }
   }, [router]);
 
-  // Effect to load and render the PDF when pdfDataUrl changes
   useEffect(() => {
     if (!pdfDataUrl) return;
 
     const loadAndRenderPdf = async () => {
       try {
         const pdfjs = await loadPdfLib();
-        if (!pdfjs) {
-          throw new Error("PDF.js library not loaded.");
-        }
+        if (!pdfjs) throw new Error("PDF.js library not loaded.");
 
         const base64String = pdfDataUrl.split(",")[1];
         const binaryString = atob(base64String);
@@ -112,25 +125,8 @@ const BookPreview = () => {
         setPdfDocument(pdfDoc);
         setNumPages(pdfDoc.numPages);
 
-        await renderPages(pdfDoc, [1, 2]);
-      } catch (error) {
-        console.error("Error loading or rendering PDF:", error);
-        alert("Failed to load the PDF preview. Please try again.");
-      }
-    };
-
-    loadAndRenderPdf();
-  }, [pdfDataUrl]);
-
-  // Function to render specific pages
-  const renderPages = async (pdfDoc, pageNumbers) => {
-    if (!pdfDoc) return;
-
-    try {
-      const rendered = await Promise.all(
-        pageNumbers.map(async (pageNum) => {
-          if (pageNum < 1 || pageNum > pdfDoc.numPages) return null;
-
+        const allPages = [];
+        for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
           const page = await pdfDoc.getPage(pageNum);
           const scale = 1.5;
           const viewport = page.getViewport({ scale });
@@ -140,34 +136,35 @@ const BookPreview = () => {
           canvas.height = viewport.height;
           canvas.width = viewport.width;
 
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport,
-          };
-          await page.render(renderContext).promise;
+          await page.render({ canvasContext: context, viewport }).promise;
+          allPages.push(canvas.toDataURL("image/png"));
+        }
 
-          return canvas.toDataURL("image/png");
-        })
-      );
+        // sirf md+ lg screens par hi "The End" page add karo
+        if (!isMobile && pdfDoc.numPages % 2 !== 0) {
+          allPages.push("cover");
+        }
 
-      setRenderedPages(rendered);
-      setCurrentPages(pageNumbers);
-    } catch (error) {
-      console.error("Error rendering pages:", error);
-    }
-  };
+        setRenderedPages(allPages);
+      } catch (error) {
+        console.error("Error loading/rendering PDF:", error);
+        alert("Failed to load the PDF preview. Please try again.");
+      }
+    };
 
-  const handlePrevPages = () => {
-    if (currentPages[0] > 1 && pdfDocument) {
-      const newStartPage = Math.max(1, currentPages[0] - 2);
-      renderPages(pdfDocument, [newStartPage, newStartPage + 1]);
-    }
-  };
+    loadAndRenderPdf();
+  }, [pdfDataUrl]);
 
-  const handleNextPages = () => {
-    if (currentPages[1] < numPages && pdfDocument) {
-      const newStartPage = Math.min(numPages - 1, currentPages[1] + 1);
-      renderPages(pdfDocument, [newStartPage, newStartPage + 1]);
+  const handleFlip = (e) => {
+    const pageIndex = e.data; // starts from 0
+    if (isMobile) {
+      // mobile: single page
+      setCurrentPage(pageIndex + 1);
+    } else {
+      // desktop/tablet: two-page spread
+      const leftPage = pageIndex + 1;
+      const rightPage = pageIndex + 2 <= numPages ? pageIndex + 2 : null;
+      setCurrentPage([leftPage, rightPage]);
     }
   };
 
@@ -175,7 +172,6 @@ const BookPreview = () => {
     router.push("/shop");
   };
 
-  // If PDF is still loading or not available, show a loading state
   if (!pdfDataUrl || !renderedPages[0]) {
     return (
       <>
@@ -192,6 +188,7 @@ const BookPreview = () => {
       <NavBar navigate={router.push} />
       <div className="w-full min-h-screen px-4 md:px-6 py-6 md:py-10 bg-gradient-to-br from-[#eef4ff] to-[#fef6fb] font-sans">
         <div className="max-w-4xl mx-auto p-4 md:p-8 lg:p-12 rounded-xl md:rounded-2xl shadow-xl bg-gradient-to-r from-[#ffe4ec] via-[#fdfdfd] to-[#e0f3ff] flex flex-col gap-6 md:gap-8 lg:gap-10">
+          {/* Header */}
           <div className="relative flex justify-center items-center px-2">
             <div
               className="absolute left-0 right-0 h-[2px] sm:h-[3px] lg:h-[4px]"
@@ -212,73 +209,109 @@ const BookPreview = () => {
             </div>
           </div>
 
-          {/* Title and Description */}
+          {/* Title */}
           <div className="flex flex-col gap-4">
             <h1 className="text-3xl font-bold text-[#2A428C]">
               Review Your Book
             </h1>
             <p className="text-gray-600 max-w-3xl">
-              Use This Preview Video to See How Your Text Book Will Look.
-              Carefully Review The Margins, Layout, And Content Before
-              Continuing. Your Book Will Print Exactly As Shown.
+              Use this preview to see how your book will look. Carefully review
+              margins, layout, and content before continuing. Your book will
+              print exactly as shown.
             </p>
           </div>
 
           <div className="bg-white rounded-xl shadow-lg p-6 mt-8">
-            {/* Two Pages Display */}
+            {/* Flipbook */}
             <div className="flex justify-center items-center mb-8">
-              <div className="flex gap-6">
-                {renderedPages.map((page, index) => (
+              <HTMLFlipBook
+                onFlip={handleFlip}
+                width={isMobile ? 320 : 500}
+                height={isMobile ? 450 : 700}
+                size="stretch"
+                minWidth={250}
+                maxWidth={1000}
+                minHeight={300}
+                maxHeight={1400}
+                maxShadowOpacity={0.5}
+                showCover={false}
+                mobileScrollSupport={true}
+                className="shadow-2xl rounded-xl"
+                ref={(book) => (bookRef.current = book)}
+                flippingTime={600}
+                useMouseEvents={true}
+                startZIndex={5}
+                autoSize={true}
+              >
+                {renderedPages.map((page, i) => (
                   <div
-                    key={index}
-                    className="border-2 border-gray-300 rounded-lg p-2 bg-white shadow-md"
+                    key={i}
+                    className={`flex items-center justify-center rounded-lg border ${
+                      page === "cover" ? "bg-black" : "bg-white p-2"
+                    }`}
                   >
-                    {page ? (
+                    {page === "cover" ? (
+                      <div className="flex justify-center items-center w-full h-full">
+                        <span className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
+                          The End
+                        </span>
+                      </div>
+                    ) : (
                       <img
                         src={page}
-                        alt={`Page ${currentPages[index]}`}
-                        className="max-w-full h-auto max-h-96"
+                        alt={`Page ${i + 1}`}
+                        className="w-full h-auto object-contain"
                       />
-                    ) : (
-                      <div className="w-64 h-96 flex items-center justify-center text-gray-500 bg-gray-100">
-                        No page available
-                      </div>
                     )}
                   </div>
                 ))}
-              </div>
+              </HTMLFlipBook>
             </div>
 
-            {/* Page Navigation */}
-            <div className="flex justify-center gap-6 mb-8">
+            {/* Navigation */}
+            <div className="flex justify-center items-center gap-6 mb-8">
               <button
-                className="px-6 py-2 bg-[#2A428C] text-white rounded-lg hover:bg-[#1d326c] disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handlePrevPages}
-                disabled={currentPages[0] === 1}
+                className="p-3 bg-[#2A428C] text-white rounded-full hover:bg-[#1d326c] disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => bookRef.current.pageFlip().flipPrev()}
+                disabled={isMobile ? currentPage === 1 : currentPage[0] === 1}
               >
-                Previous
+                <ChevronLeft size={20} />
               </button>
+
               <span className="px-4 py-2 bg-gray-100 rounded-lg text-gray-700">
-                Pages {currentPages[0]}-{currentPages[1]} of {numPages}
+                {isMobile ? (
+                  <>
+                    Page {currentPage} of {numPages}
+                  </>
+                ) : (
+                  <>
+                    Pages {currentPage[0]}
+                    {currentPage[1] && currentPage[1] <= numPages
+                      ? `-${currentPage[1]}`
+                      : ""}{" "}
+                    of {numPages}
+                  </>
+                )}
               </span>
+
               <button
-                className="px-6 py-2 bg-[#2A428C] text-white rounded-lg hover:bg-[#1d326c] disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={handleNextPages}
-                disabled={currentPages[1] >= numPages}
+                className="p-3 bg-[#2A428C] text-white rounded-full hover:bg-[#1d326c] disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => bookRef.current.pageFlip().flipNext()}
+                disabled={
+                  isMobile
+                    ? currentPage === numPages
+                    : !currentPage[1] || currentPage[1] >= numPages
+                }
               >
-                Next
+                <ChevronRight size={20} />
               </button>
             </div>
 
-            {/* Important Information Section */}
+            {/* Important Info */}
             <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-8">
               <h2 className="text-xl font-bold text-[#2A428C] mb-4">
                 Important Information About Your Book
               </h2>
-              <p className="text-gray-700 mb-4">
-                Successfully review your book before continuing. The following
-                items must be checked:
-              </p>
               <ol className="list-decimal pl-6 text-gray-700 space-y-2">
                 <li>Ensure all text is visible and not cut off by margins</li>
                 <li>Verify that images are clear and properly positioned</li>
@@ -291,49 +324,6 @@ const BookPreview = () => {
             </div>
 
             <div className="flex flex-col items-center gap-4 md:gap-6 mt-6 md:mt-10">
-              {/* <button
-                onClick={handleContactExpert}
-                disabled={!!state.coverFile}
-                className={`w-full max-w-md md:max-w-lg lg:max-w-xl px-6 md:px-10 py-2 md:py-3 bg-gradient-to-r from-[#0a79f8] to-[#1e78ee] text-white font-medium text-sm md:text-base rounded-full shadow-md hover:shadow-lg transition ${
-                  state.coverFile ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                Contact Cover Design Expert
-              </button>
-
-              <button
-                onClick={() => {
-                  // Save the uploaded file and form data to localStorage for the preview
-                  if (state.selectedFile) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                      const pdfDataUrl = e.target.result; // This is the data URL
-                      localStorage.setItem("previewPdfDataUrl", pdfDataUrl);
-                      localStorage.setItem(
-                        "previewFormData",
-                        JSON.stringify(state.form)
-                      );
-                      localStorage.setItem(
-                        "previewProjectData",
-                        JSON.stringify(state.projectData)
-                      );
-                      router.push("/book-preview");
-                    };
-                    reader.onerror = function () {
-                      alert("Failed to prepare PDF for preview.");
-                    };
-                    reader.readAsDataURL(state.selectedFile);
-                  } else {
-                    alert("Please upload your book PDF file first.");
-                  }
-                }}
-                className={`w-full max-w-md md:max-w-lg lg:max-w-xl px-6 md:px-10 py-2 md:py-3 bg-gradient-to-r from-[#0a79f8] to-[#1e78ee] text-white font-medium text-sm md:text-base rounded-full shadow-md hover:shadow-lg transition ${
-                  state.coverFile ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-              >
-                Preview Your Book
-              </button> */}
-
               <button
                 onClick={handleSubmit}
                 className="w-full max-w-md md:max-w-lg lg:max-w-xl px-6 md:px-10 py-2 md:py-3 bg-gradient-to-r from-[#F8C20A] to-[#EE831E] text-white font-medium text-sm md:text-base rounded-full shadow-md hover:shadow-lg"
@@ -341,8 +331,6 @@ const BookPreview = () => {
                 Print Your Book
               </button>
             </div>
-
-          
           </div>
         </div>
       </div>

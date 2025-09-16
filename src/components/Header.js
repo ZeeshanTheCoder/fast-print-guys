@@ -75,9 +75,7 @@ const Header = () => {
             <Image
               src={FastPrintLogo}
               alt="Fast Print Guys Logo"
-              width={48}
-              height={48}
-              className="w-10 h-10 sm:w-12 sm:h-12 transition-transform duration-200 hover:scale-105"
+              className="w-16 h-16 sm:w-20 transition-transform duration-200 hover:scale-105"
             />
           </Link>
 
